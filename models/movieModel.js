@@ -13,11 +13,9 @@ const movieSchema = mongoose.Schema({
         type: Number,
         required: [true, "Por favor añade el año de lanzamiento de la película"],
     },
-    rating: {
-        type: Number,
-        required: [true, "Por favor añade una calificación a la película"],
-        min: 0,
-        max: 10,
+    poster: {
+        type: String,
+        required: [true, "Por favor añade un enlace al póster de la película"],
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +23,7 @@ const movieSchema = mongoose.Schema({
         required: true,
     }
 }, {
-    timestamps: true, // Mantiene registro de cuándo se creó o actualizó la película
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Movie', movieSchema);

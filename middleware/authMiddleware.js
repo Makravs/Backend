@@ -12,6 +12,7 @@ const protect = asyncHandler(async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             // Obtener usuario del token
             req.user = await User.findById(decoded.id).select('-password');
+            req.esAdmin = decoded.esAdmin;
             next();
         } catch (error) {
             console.error(error);
@@ -19,11 +20,14 @@ const protect = asyncHandler(async (req, res, next) => {
             throw new Error('Acceso no autorizado');
         }
     }
+
     if (!token) {
         res.status(401);
         throw new Error('Acceso no autorizado, token no proporcionado');
     }
 });
+
 module.exports = {
     protect
+
 };

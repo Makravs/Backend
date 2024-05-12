@@ -9,19 +9,18 @@ const getMovies = asyncHandler(async (req, res) => {
 
 // Crear una película
 const createMovie = asyncHandler(async (req, res) => {
-    const { title, description, year, rating } = req.body;
-    if (!title || !description || !year || !rating) {
+    const { title, description, year, poster } = req.body; // Corregido para incluir poster en lugar de rating
+    if (!title || !description || !year || !poster) { // Asegúrate de que todos los campos necesarios estén presentes
         res.status(400);
         throw new Error('Todos los campos son necesarios');
     }
 
-    // Asegúrate de incluir el ID del usuario autenticado como 'createdBy'
     const movie = await Movie.create({
         title,
         description,
         year,
-        rating,
-        createdBy: req.user._id  // Asume que 'req.user' tiene los detalles del usuario
+        poster,
+        createdBy: req.user._id
     });
 
     res.status(201).json(movie);
@@ -29,6 +28,7 @@ const createMovie = asyncHandler(async (req, res) => {
 
 // Actualizar una película
 const updateMovie = asyncHandler(async (req, res) => {
+    const { title, description, year, poster } = req.body;
     const movie = await Movie.findById(req.params.id)
 
     if (!movie) {
@@ -36,8 +36,13 @@ const updateMovie = asyncHandler(async (req, res) => {
         throw new Error('Película no encontrada');
     }
 
-    // Solo actualizar campos especificados, sin modificar el 'createdBy'
-    const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    // Actualizar los campos especificados, sin modificar el 'createdBy'
+    movie.title = title || movie.title;
+    movie.description = description || movie.description;
+    movie.year = year || movie.year;
+    movie.poster = poster || movie.poster;
+
+    const updatedMovie = await movie.save();
     res.status(200).json(updatedMovie);
 })
 

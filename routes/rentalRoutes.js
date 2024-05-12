@@ -9,14 +9,11 @@ const {
     deleteRental
 } = require('../controllers/rentalController');
 
-// Rutas para manejar la obtención y creación de rentas
 router.route('/')
-    .get(protect, getRentals)  // Obtener todas las rentas del usuario autenticado
-    .post(protect, createRental);  // Crear una nueva renta
+    .get(protect, getRentals)
+    .post(protect, createRental);
 
-// Rutas para manejar la actualización y eliminación de rentas específicas
 router.route('/:id')
-    .put(protect, updateRental)  // Actualizar una renta específica
-    .delete(protect, deleteRental);  // Eliminar una renta específica
-
+    .put(protect, updateRental)
+    .delete(protect, deleteRental);
 module.exports = router;
